@@ -9,11 +9,18 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
+import static io.quarkus.arc.ComponentsProvider.LOG;
+
 @Path("/invoice")
 public class InvoiceResource {
 
+    private final InvoiceCalculationService invoiceCalculationService;
+
     @Inject
-    InvoiceCalculationService invoiceCalculationService;
+    public InvoiceResource(
+            InvoiceCalculationService invoiceCalculationService) {
+        this.invoiceCalculationService = invoiceCalculationService;
+    }
 
 
     @POST
@@ -21,6 +28,11 @@ public class InvoiceResource {
      @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String calculateTotal(InvoiceRequest invoiceRequest) {
-        return invoiceRequest.invoice.currency + "\n";
+        LOG.infof(
+                "Received invoice request. Currency=%s, Date=%s, Lines=%d",
+                invoiceRequest.invoice.currency,
+                invoiceRequest.invoice.date,
+                invoiceRequest.invoice.lines.size());
+        return invoiceCalculationService.calculateTotal(invoiceRequest) + "\n";
     }
 }
