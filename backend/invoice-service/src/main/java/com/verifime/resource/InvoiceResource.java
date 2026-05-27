@@ -1,5 +1,6 @@
 package com.verifime.resource;
 
+import com.verifime.dto.InvoiceRequest;
 import com.verifime.services.InvoiceCalculationService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -17,9 +18,9 @@ public class InvoiceResource {
 
     @POST
     @Path("/total")
-    @Consumes(MediaType.APPLICATION_JSON)
+     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String calculateTotal() {
-        return invoiceCalculationService.calculateTotal().toString();
+    public String calculateTotal(InvoiceRequest invoiceRequest) {
+        return invoiceRequest.invoice.currency + "\n";
     }
 }
