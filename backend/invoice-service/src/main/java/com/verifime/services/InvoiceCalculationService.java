@@ -7,16 +7,43 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
 import org.jboss.logging.Logger;
 
 @ApplicationScoped
 public class InvoiceCalculationService {
 
+
+    private final CurrencyConversionService currencyConversionService;
+
     @Inject
-    CurrencyConversionService currencyConversionService;
+    public InvoiceCalculationService(CurrencyConversionService currencyConversionService) {
+        this.currencyConversionService = currencyConversionService;
+    }
 
     private static final Logger LOG =
             Logger.getLogger(InvoiceCalculationService.class);
+
+    private void validate(InvoiceRequest request) {
+
+        if (request == null ||
+                request.invoice == null ||
+                request.invoice.lines == null) {
+            throw new BadRequestException("Invalid invoice request");
+        }
+
+            try {
+
+                LocalDate.parse(request.invoice.date);
+
+            } catch (DateTimeParseException e) {
+
+                throw new BadRequestException(
+                        "Invalid invoice date");
+            }
+    }
 
     public String calculateTotal(InvoiceRequest request) {
 
@@ -48,12 +75,5 @@ public class InvoiceCalculationService {
         return total.toString();
     }
 
-    private void validate(InvoiceRequest request) {
 
-        if (request == null ||
-                request.invoice == null ||
-                request.invoice.lines == null) {
-            throw new BadRequestException("Invalid invoice request");
-        }
-    }
 }

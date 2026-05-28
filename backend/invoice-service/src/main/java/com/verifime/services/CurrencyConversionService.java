@@ -4,6 +4,8 @@ import com.verifime.client.FrankfurterClient;
 import com.verifime.dto.ExchangeRateResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -38,18 +40,30 @@ public class CurrencyConversionService  {
                 toCurrency,
                 date);
 
-        ExchangeRateResponse response =
-                frankfurterClient.getRate(
-                        date,
-                        fromCurrency,
-                        toCurrency);
+        ExchangeRateResponse response;
+              try {
+                  response = frankfurterClient.getRate(
+                          date,
+                          fromCurrency,
+                          toCurrency);
+              }
+              catch (Exception e) {
+
+                  throw new NotFoundException(
+                          "Exchange rate not found");
+              }
+        if (response == null ||
+                response.rates == null ||
+                !response.rates.containsKey(toCurrency)) {
+
+            throw new NotFoundException(
+                    "Exchange rate not found");
+        }
 
 
 
         BigDecimal rate =
-                response.rates.get(toCurrency).setScale(4, RoundingMode.HALF_UP);
                 response.rates.get(toCurrency)
-
                         .setScale(4, RoundingMode.HALF_UP);
         LOG.infof("Exchange rate=%s", rate);
 
