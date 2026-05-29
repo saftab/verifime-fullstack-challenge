@@ -58,7 +58,6 @@ const calculateTotal = async () => {
     const result = await response.text();
 
     if (!response.ok) {
-      // Backend returns "Error: ..." for 400/404/500
       setError(result);
     } else {
       setTotal(result);
@@ -75,7 +74,7 @@ const calculateTotal = async () => {
     <div style={{ padding: 20 }}>
 
       <Typography variant="h4">
-          Invoice form {total}
+          Invoice form
       </Typography>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -87,7 +86,7 @@ const calculateTotal = async () => {
 
       if (newValue) {
         setInvoiceDate(
-          dayjs(newValue).format("MM-DD-YYYY")
+          dayjs(newValue).format("YYYY-MM-DD")
         );
       } else {
         setInvoiceDate("");
@@ -164,8 +163,7 @@ const calculateTotal = async () => {
 
       <Button
   variant="outlined"
-  onClick={addLine}
->
+  onClick={addLine}>
   Add Line
 </Button>
 
@@ -173,10 +171,12 @@ const calculateTotal = async () => {
   variant="contained"
   onClick={calculateTotal}
   disabled={loading}
-  style={{ marginLeft: "10px" }}
+  style={{ marginLeft: "10px"}}
+
 >
   {loading ? <CircularProgress size={20} /> : "Calculate Total"}
 </Button>
+
 {total && <Alert severity="success">Total: {total}</Alert>}
 {error && <Alert severity="error">{error}</Alert>}
 

@@ -24,8 +24,7 @@ public class InvoiceCalculationService {
         this.currencyConversionService = currencyConversionService;
     }
 
-    private static final Logger LOG =
-            Logger.getLogger(InvoiceCalculationService.class);
+    private static final Logger LOG = Logger.getLogger(InvoiceCalculationService.class);
 
     private void validate(InvoiceRequest request) {
 
@@ -37,11 +36,9 @@ public class InvoiceCalculationService {
 
             try {
                 DateTimeFormatter formatter =
-                        DateTimeFormatter.ofPattern("MM-dd-yyyy");
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
                  LocalDate.parse(request.invoice.date, formatter);
-
-//                LocalDate.parse(request.invoice.date);
 
             } catch (DateTimeParseException e) {
 
