@@ -59,12 +59,15 @@ const calculateTotal = async () => {
 
     if (!response.ok) {
       setError(result);
+      setTotal("");
     } else {
       setTotal(result);
+      setError("");
     }
   } catch (err) {
     // Network failure, CORS error, backend not running
     setError("Could not reach the server. Is the backend running on port 8080?");
+    setTotal("");
   } finally {
     setLoading(false);
   }
