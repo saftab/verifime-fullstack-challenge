@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import org.jboss.logging.Logger;
@@ -35,8 +36,12 @@ public class InvoiceCalculationService {
         }
 
             try {
+                DateTimeFormatter formatter =
+                        DateTimeFormatter.ofPattern("MM-dd-yyyy");
 
-                LocalDate.parse(request.invoice.date);
+                 LocalDate.parse(request.invoice.date, formatter);
+
+//                LocalDate.parse(request.invoice.date);
 
             } catch (DateTimeParseException e) {
 

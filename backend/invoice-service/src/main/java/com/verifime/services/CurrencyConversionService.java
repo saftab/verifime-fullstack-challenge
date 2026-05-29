@@ -4,7 +4,6 @@ import com.verifime.client.FrankfurterClient;
 import com.verifime.dto.ExchangeRateResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.math.BigDecimal;
